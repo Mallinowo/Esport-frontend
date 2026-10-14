@@ -16,9 +16,7 @@ Figma (dostęp do komentowania): LINK_DO_FIGMY
 - Vue 3, TypeScript, Vite
 - Tailwind CSS
 - Pinia, Vue Router
-- Storybook (biblioteka komponentów)
-- Vitest, Playwright
-- Docker, GitHub Actions
+- Vitest
 
 Aplikacja komunikuje się z backendem wyłącznie przez REST API i WebSocket. Typy i klient API są generowane ze specyfikacji OpenAPI backendu.
 
@@ -43,8 +41,6 @@ Aplikacja działa pod adresem http://localhost:5173. Adres API ustawia się w pl
 | `npm run dev` | serwer deweloperski |
 | `npm run build` | build produkcyjny |
 | `npm run test` | testy jednostkowe (Vitest) |
-| `npm run test:e2e` | testy end-to-end (Playwright) |
-| `npm run storybook` | biblioteka komponentów na http://localhost:6006 |
 
 ## Zespół
 
