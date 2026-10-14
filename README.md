@@ -1,28 +1,28 @@
 # Esport Platform: frontend
 
-Aplikacja webowa platformy do prowadzenia lig i turniejów e-sportowych. Projekt zespołowy realizowany w Collegium Witelona.
+Web application for the esports leagues and tournaments platform. A team project built at Collegium Witelona.
 
-Powiązane repozytoria:
+Related repositories:
 
-- dokumentacja projektu: https://github.com/Mallinowo/esport-platform
+- project documentation: https://github.com/Mallinowo/esport-platform
 - backend (REST API): https://github.com/Mallinowo/Esport-backend
 
-## Projekt interfejsu
+## Interface design
 
-Figma (dostęp do komentowania): LINK_DO_FIGMY
+Figma (comments enabled): LINK_DO_FIGMY
 
-## Stos technologiczny
+## Tech stack
 
 - Vue 3, TypeScript, Vite
 - Tailwind CSS
 - Pinia, Vue Router
 - Vitest
 
-Aplikacja komunikuje się z backendem wyłącznie przez REST API i WebSocket. Typy i klient API są generowane ze specyfikacji OpenAPI backendu.
+The application talks to the backend only through the REST API and WebSocket. The API types and client are generated from the backend's OpenAPI specification.
 
-## Uruchomienie lokalne
+## Running locally
 
-Wymagania: Node.js 22 i npm.
+Requirements: Node.js 22 and npm.
 
 ```bash
 git clone https://github.com/Mallinowo/Esport-frontend.git
@@ -32,17 +32,17 @@ npm install
 npm run dev
 ```
 
-Aplikacja działa pod adresem http://localhost:5173. Adres API ustawia się w pliku `.env`.
+The application runs at http://localhost:5173. The API URL is set in `.env`.
 
-## Skrypty
+## Scripts
 
-| Polecenie | Działanie |
+| Command | Description |
 |---|---|
-| `npm run dev` | serwer deweloperski |
-| `npm run build` | build produkcyjny |
-| `npm run test` | testy jednostkowe (Vitest) |
+| `npm run dev` | development server |
+| `npm run build` | production build |
+| `npm run test` | unit tests (Vitest) |
 
-## Zespół
+## Team
 
-- Jakub Maliński: lider projektu, frontend
+- Jakub Maliński: project lead, frontend
 - Wojciech Kasprzyk: frontend
