@@ -4,7 +4,7 @@ Web application for the esports leagues and tournaments platform. A team project
 
 Related repositories:
 
-- project documentation: https://github.com/Mallinowo/esport-platform
+- project documentation: https://github.com/Mallinowo/Esport-backend/tree/main/docs
 - backend (REST API): https://github.com/Mallinowo/Esport-backend
 
 ## Interface design
