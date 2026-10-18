@@ -38,7 +38,7 @@ describe('Button', () => {
       attrs: { 'aria-label': 'Dodaj' },
       slots: { icon: '<svg />' },
     })
-    expect(wrapper.classes()).toContain('size-10')
+    expect(wrapper.classes()).toContain('size-11')
     expect(wrapper.attributes('aria-label')).toBe('Dodaj')
   })
 })
