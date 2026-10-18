@@ -9,7 +9,7 @@ Related repositories:
 
 ## Interface design
 
-Figma (comments enabled): LINK_DO_FIGMY
+Figma (comments enabled): https://www.figma.com/design/CGoSyApn2FSrY2Xm8pGTCH/Esport-Platform---Design-System?node-id=0-1
 
 ## Tech stack
 
