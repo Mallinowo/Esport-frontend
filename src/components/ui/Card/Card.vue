@@ -2,13 +2,9 @@
 import { computed } from 'vue'
 
 export interface CardProps {
-  /** default = static container, interactive = clickable with hover/focus/selected states */
   variant?: 'default' | 'interactive'
-  /** Only meaningful for the interactive variant */
   selected?: boolean
-  /** Only meaningful for the interactive variant */
   disabled?: boolean
-  /** Root element, e.g. 'article' or 'li' */
   as?: string
 }
 
@@ -66,7 +62,6 @@ function onKeydown(event: KeyboardEvent) {
     @click="onClick"
     @keydown="onKeydown"
   >
-    <!-- Selected state is not conveyed by colour alone: thicker ring + check icon -->
     <svg
       v-if="isInteractive && selected"
       class="absolute right-2 top-2 h-5 w-5 text-indigo-700"
