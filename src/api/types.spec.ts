@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { Game, Paginated, Resource, TeamSummary, User } from './types'
+import type { BracketMatch, Game, MatchDetails, Paginated, Resource, TeamSummary, User } from './types'
 
 describe('typy API', () => {
   it('pasują do użytkownika z umowy API', () => {
@@ -29,5 +29,26 @@ describe('typy API', () => {
   it('pozwalają na drużynę bez logo', () => {
     const team: TeamSummary = { id: 1, name: 'Wilki Legnica', short_name: 'WLK', logo_url: null, is_followed: false }
     expect(team.logo_url).toBeNull()
+  })
+
+  it('pozwalają na mecz w drabince bez ustalonego rywala', () => {
+    const match: BracketMatch = {
+      id: 207,
+      position: 1,
+      home_team: { id: 11, name: 'Ognisty Feniks', short_name: 'OFX', logo_url: null, is_followed: false },
+      away_team: null,
+      home_score: null,
+      away_score: null,
+      status: 'scheduled',
+      winner_team_id: null,
+      next_match_id: null,
+      scheduled_at: '2026-11-08T17:00:00Z',
+    }
+    expect(match.away_team).toBeNull()
+  })
+
+  it('opisują uprawnienia do meczu', () => {
+    const can: MatchDetails['can'] = { report: false, confirm: true, dispute: true, resolve: false }
+    expect(Object.keys(can)).toEqual(['report', 'confirm', 'dispute', 'resolve'])
   })
 })
