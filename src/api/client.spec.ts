@@ -1,6 +1,7 @@
 import { AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { api, getCsrfCookie } from './client'
+import { ApiError } from './errors'
 
 const defaultAdapter = api.defaults.adapter
 
@@ -62,7 +63,12 @@ describe('api', () => {
 
   it('powtarza żądanie po 419 tylko raz', async () => {
     const adapter = mockAdapter([419, 419])
-    await expect(api.post('/auth/logout')).rejects.toMatchObject({ response: { status: 419 } })
+    await expect(api.post('/auth/logout')).rejects.toMatchObject({ status: 419 })
     expect(calledUrls(adapter)).toEqual(['/auth/logout', '/sanctum/csrf-cookie', '/auth/logout'])
+  })
+
+  it('odrzuca błędy jako ApiError', async () => {
+    mockAdapter([422])
+    await expect(api.post('/auth/register')).rejects.toBeInstanceOf(ApiError)
   })
 })

@@ -1,4 +1,5 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios'
+import { toApiError } from './errors'
 
 export const apiUrl: string = import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api'
 
@@ -22,5 +23,5 @@ api.interceptors.response.use(undefined, async (error) => {
     await getCsrfCookie()
     return api.request(config)
   }
-  return Promise.reject(error)
+  return Promise.reject(toApiError(error))
 })
