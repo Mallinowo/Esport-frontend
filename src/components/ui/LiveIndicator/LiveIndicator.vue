@@ -15,22 +15,22 @@ const props = withDefaults(defineProps<LiveIndicatorProps>(), {
 
 const isLive = computed(() => props.status === 'live')
 
-const text = computed(() => props.label ?? (isLive.value ? 'Live' : 'Offline'))
+const text = computed(() => props.label ?? (isLive.value ? 'NA ŻYWO' : 'OFFLINE'))
 
 const textClasses = computed(() => [
-  props.size === 'sm' ? 'text-xs' : 'text-sm',
-  isLive.value ? 'text-red-700' : 'text-slate-700',
+  props.size === 'sm' ? 'text-caption' : 'text-label',
+  isLive.value ? 'text-danger-fg' : 'text-fg-muted',
 ])
 
 const dotClasses = computed(() => [
   props.size === 'sm' ? 'h-1.5 w-1.5' : 'h-2 w-2',
-  isLive.value ? 'bg-red-600 animate-pulse motion-reduce:animate-none' : 'bg-slate-500',
+  isLive.value ? 'bg-danger-default animate-pulse motion-reduce:animate-none' : 'bg-fg-muted',
 ])
 </script>
 
 <template>
   <span
-    class="inline-flex items-center gap-1.5 font-semibold uppercase tracking-wide"
+    class="inline-flex items-center gap-1.5 font-semibold tracking-wide"
     :class="textClasses"
     data-testid="live-indicator"
   >
