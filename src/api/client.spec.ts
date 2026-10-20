@@ -1,15 +1,28 @@
-import type { InternalAxiosRequestConfig } from 'axios'
+import { AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { api, getCsrfCookie } from './client'
 
 const defaultAdapter = api.defaults.adapter
 
-function mockAdapter() {
-  const adapter = vi.fn((config: InternalAxiosRequestConfig) =>
-    Promise.resolve({ data: {}, status: 204, statusText: 'No Content', headers: {}, config }),
-  )
+function respond(config: InternalAxiosRequestConfig, status: number, data: unknown = {}) {
+  const response: AxiosResponse = { data, status, statusText: '', headers: {}, config }
+  if (status >= 400) {
+    return Promise.reject(new AxiosError('Request failed', 'ERR_BAD_REQUEST', config, null, response))
+  }
+  return Promise.resolve(response)
+}
+
+function mockAdapter(statuses: number[] = [204]) {
+  const adapter = vi.fn((config: InternalAxiosRequestConfig) => {
+    if (config.url === '/sanctum/csrf-cookie') return respond(config, 204)
+    return respond(config, statuses.shift() ?? 200)
+  })
   api.defaults.adapter = adapter
   return adapter
+}
+
+function calledUrls(adapter: ReturnType<typeof mockAdapter>) {
+  return adapter.mock.calls.map(([config]) => config.url)
 }
 
 afterEach(() => {
@@ -38,5 +51,18 @@ describe('api', () => {
     const config = adapter.mock.calls[0]![0]
     expect(config.baseURL).toBe(new URL(api.defaults.baseURL!).origin)
     expect(config.url).toBe('/sanctum/csrf-cookie')
+  })
+
+  it('po 419 odświeża CSRF i powtarza żądanie', async () => {
+    const adapter = mockAdapter([419, 200])
+    const response = await api.post('/auth/logout')
+    expect(response.status).toBe(200)
+    expect(calledUrls(adapter)).toEqual(['/auth/logout', '/sanctum/csrf-cookie', '/auth/logout'])
+  })
+
+  it('powtarza żądanie po 419 tylko raz', async () => {
+    const adapter = mockAdapter([419, 419])
+    await expect(api.post('/auth/logout')).rejects.toMatchObject({ response: { status: 419 } })
+    expect(calledUrls(adapter)).toEqual(['/auth/logout', '/sanctum/csrf-cookie', '/auth/logout'])
   })
 })
