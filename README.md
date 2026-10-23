@@ -22,7 +22,7 @@ The application talks to the backend only through the REST API and WebSocket. Th
 
 ## Running locally
 
-Requirements: Node.js 22 and npm.
+Requirements: Node.js 22.12 or newer and npm.
 
 ```bash
 git clone https://github.com/Mallinowo/Esport-frontend.git
@@ -33,6 +33,13 @@ npm run dev
 ```
 
 The application runs at http://localhost:5173. The API URL is set in `.env`.
+
+## Mock API
+
+Until the backend is ready, the dev server answers API requests with mocks (MSW) based on the API contract. Mock data is in `src/mocks`, and the same handlers are used in unit tests.
+
+- `VITE_API_MOCKS=false` in `.env` turns the mocks off and sends requests to the real API.
+- `?mock=empty`, `?mock=error` or `?mock=guest` added to the page URL shows the empty, error or logged out state.
 
 ## Scripts
 
