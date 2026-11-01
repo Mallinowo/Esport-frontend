@@ -37,4 +37,25 @@ describe('Alert', () => {
     const wrapper = mount(Alert, { props: { title: 'Sam tytuł' } })
     expect(wrapper.find('[data-testid="alert-content"]').exists()).toBe(false)
   })
+
+  it('nie pokazuje przycisków, gdy nie są potrzebne', () => {
+    const wrapper = mount(Alert, { props: { title: 'Komunikat' } })
+    expect(wrapper.findAll('button')).toHaveLength(0)
+  })
+
+  it('emituje action po kliknięciu przycisku akcji', async () => {
+    const wrapper = mount(Alert, { props: { tone: 'danger', title: 'Błąd sieci', actionLabel: 'Spróbuj ponownie' } })
+    const button = wrapper.find('button')
+    expect(button.text()).toBe('Spróbuj ponownie')
+    await button.trigger('click')
+    expect(wrapper.emitted('action')).toHaveLength(1)
+  })
+
+  it('emituje close po kliknięciu przycisku zamknięcia', async () => {
+    const wrapper = mount(Alert, { props: { title: 'Zapisano', dismissible: true } })
+    const button = wrapper.find('button[aria-label="Zamknij"]')
+    expect(button.exists()).toBe(true)
+    await button.trigger('click')
+    expect(wrapper.emitted('close')).toHaveLength(1)
+  })
 })

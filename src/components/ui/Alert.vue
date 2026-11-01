@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import Button from './Button.vue'
 
 export type AlertTone = 'info' | 'success' | 'warning' | 'danger'
 
@@ -7,11 +8,19 @@ const props = withDefaults(
   defineProps<{
     tone?: AlertTone
     title?: string
+    actionLabel?: string
+    dismissible?: boolean
   }>(),
   {
     tone: 'info',
+    dismissible: false,
   },
 )
+
+const emit = defineEmits<{
+  (e: 'action'): void
+  (e: 'close'): void
+}>()
 
 const toneClasses: Record<AlertTone, string> = {
   info: 'border-info-line bg-info-bg',
@@ -60,6 +69,30 @@ const role = computed(() => (props.tone === 'danger' || props.tone === 'warning'
       <div v-if="$slots.default" class="text-body-sm text-fg-secondary" data-testid="alert-content">
         <slot />
       </div>
+      <div v-if="actionLabel" class="-ml-4 mt-1">
+        <Button variant="ghost" size="sm" @click="emit('action')">{{ actionLabel }}</Button>
+      </div>
     </div>
+    <button
+      v-if="dismissible"
+      type="button"
+      aria-label="Zamknij"
+      class="-m-2 flex size-9 shrink-0 items-center justify-center rounded-lg text-fg-muted transition-colors hover:bg-surface-subtle hover:text-fg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-focus"
+      @click="emit('close')"
+    >
+      <svg
+        class="size-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </svg>
+    </button>
   </div>
 </template>
