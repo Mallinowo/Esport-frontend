@@ -6,7 +6,10 @@ const route = useRoute()
 </script>
 
 <template>
-  <nav aria-label="Menu główne" class="fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t border-line-default bg-surface-default lg:hidden">
+  <nav
+    aria-label="Menu główne"
+    class="fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t border-line-default bg-surface-default lg:hidden"
+  >
     <RouterLink
       v-for="item in navItems"
       :key="item.to"

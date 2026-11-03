@@ -60,7 +60,10 @@ const role = computed(() => (props.tone === 'danger' || props.tone === 'warning'
       aria-hidden="true"
       data-testid="alert-icon"
     >
-      <path v-if="tone === 'warning'" d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+      <path
+        v-if="tone === 'warning'"
+        d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"
+      />
       <circle v-else cx="12" cy="12" r="10" />
       <path v-for="path in iconPaths[tone]" :key="path" :d="path" />
     </svg>

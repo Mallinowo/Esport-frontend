@@ -27,7 +27,8 @@ const iconOnly = computed(() => !!slots.icon && !slots.default)
 
 const variantClasses: Record<Variant, string> = {
   primary: 'bg-brand-default text-fg-on-brand hover:bg-brand-hover active:bg-brand-pressed',
-  secondary: 'border border-line-strong bg-surface-default text-fg-primary hover:bg-surface-subtle active:bg-brand-subtle',
+  secondary:
+    'border border-line-strong bg-surface-default text-fg-primary hover:bg-surface-subtle active:bg-brand-subtle',
   ghost: 'text-brand-fg hover:bg-brand-subtle active:bg-brand-subtle',
   danger: 'bg-danger-default text-fg-on-brand hover:bg-danger-hover active:bg-danger-hover',
 }

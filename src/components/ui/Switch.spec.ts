@@ -24,7 +24,11 @@ describe('Switch', () => {
   it('włącza się po kliknięciu w etykietę', async () => {
     const wrapper = mount(Switch, {
       attachTo: document.body,
-      props: { label: 'Powiadomienia o wynikach', modelValue: false, 'onUpdate:modelValue': (value: boolean) => wrapper.setProps({ modelValue: value }) },
+      props: {
+        label: 'Powiadomienia o wynikach',
+        modelValue: false,
+        'onUpdate:modelValue': (value: boolean) => wrapper.setProps({ modelValue: value }),
+      },
     })
     await wrapper.find('label').trigger('click')
     expect(wrapper.props('modelValue')).toBe(true)
@@ -33,7 +37,11 @@ describe('Switch', () => {
 
   it('wyłącza się po ponownym kliknięciu', async () => {
     const wrapper = mount(Switch, {
-      props: { label: 'Powiadomienia o wynikach', modelValue: true, 'onUpdate:modelValue': (value: boolean) => wrapper.setProps({ modelValue: value }) },
+      props: {
+        label: 'Powiadomienia o wynikach',
+        modelValue: true,
+        'onUpdate:modelValue': (value: boolean) => wrapper.setProps({ modelValue: value }),
+      },
     })
     await wrapper.find('input').setValue(false)
     expect(wrapper.props('modelValue')).toBe(false)
