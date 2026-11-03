@@ -88,7 +88,8 @@ function moveActive(step: 1 | -1) {
   const enabled = enabledIndexes()
   if (!enabled.length) return
   const position = enabled.indexOf(activeIndex.value)
-  const next = position === -1 ? (step === 1 ? 0 : enabled.length - 1) : Math.min(Math.max(position + step, 0), enabled.length - 1)
+  const next =
+    position === -1 ? (step === 1 ? 0 : enabled.length - 1) : Math.min(Math.max(position + step, 0), enabled.length - 1)
   activeIndex.value = enabled[next]!
   scrollToActive()
 }
@@ -241,7 +242,15 @@ function onKeydown(event: KeyboardEvent) {
     </div>
     <input v-if="name" type="hidden" :name="name" :value="model ?? ''" />
     <p v-if="error" :id="errorId" class="flex items-start gap-1.5 text-body-sm text-danger-fg">
-      <svg class="mt-0.5 size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <svg
+        class="mt-0.5 size-4 shrink-0"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
         <circle cx="12" cy="12" r="9" />
         <path d="M12 7v6M12 16.5v.01" />
       </svg>

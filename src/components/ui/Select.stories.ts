@@ -42,7 +42,9 @@ export const Open: Story = {
   },
 }
 
-export const Rounds: Story = { args: { label: 'Kolejka', options: rounds, placeholder: 'Wybierz kolejkę', modelValue: 3 } }
+export const Rounds: Story = {
+  args: { label: 'Kolejka', options: rounds, placeholder: 'Wybierz kolejkę', modelValue: 3 },
+}
 
 export const WithError: Story = { args: { error: 'Wybierz grę, w której odbędą się rozgrywki' } }
 

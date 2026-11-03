@@ -22,7 +22,11 @@ describe('TextField', () => {
 
   it('aktualizuje v-model po wpisaniu tekstu', async () => {
     const wrapper = mount(TextField, {
-      props: { label: 'Email', modelValue: '', 'onUpdate:modelValue': (value: string | number) => wrapper.setProps({ modelValue: value }) },
+      props: {
+        label: 'Email',
+        modelValue: '',
+        'onUpdate:modelValue': (value: string | number) => wrapper.setProps({ modelValue: value }),
+      },
     })
     await wrapper.find('input').setValue('kuba@example.com')
     expect(wrapper.props('modelValue')).toBe('kuba@example.com')

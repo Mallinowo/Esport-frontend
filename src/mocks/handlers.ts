@@ -75,7 +75,9 @@ function permissions(match: Match): MatchPermissions {
   const none = { report: false, confirm: false, dispute: false, resolve: false }
   if (!user) return none
 
-  const myTeamIds = [match.home_team?.id, match.away_team?.id].filter((id) => id !== undefined && user.captain_of_team_ids.includes(id))
+  const myTeamIds = [match.home_team?.id, match.away_team?.id].filter(
+    (id) => id !== undefined && user.captain_of_team_ids.includes(id),
+  )
   const isCaptain = myTeamIds.length > 0
   const pending = (db.reports[match.id] ?? []).find((report) => report.status === 'pending')
   const canAnswer = isCaptain && !!pending && !myTeamIds.includes(pending.reported_by_team_id)
@@ -239,7 +241,9 @@ export const handlers = [
     const competition = findCompetition(params.id)
     if (!competition || competition.format === 'league') return notFound()
     if (competition.id === 2 && scenario() !== 'empty') return HttpResponse.json({ data: bracket })
-    return HttpResponse.json({ data: { competition_id: competition.id, generated_at: null, champion: null, rounds: [] } })
+    return HttpResponse.json({
+      data: { competition_id: competition.id, generated_at: null, champion: null, rounds: [] },
+    })
   }),
 
   http.get(url('/user/matches'), () => {
@@ -302,7 +306,10 @@ export const handlers = [
       away_score: awayScore,
       map: map ? String(map) : null,
       comment: comment ? String(comment) : null,
-      screenshot_url: screenshot instanceof File && screenshot.size > 0 ? `http://localhost:8000/storage/reports/${db.nextReportId - 1}/${screenshot.name}` : null,
+      screenshot_url:
+        screenshot instanceof File && screenshot.size > 0
+          ? `http://localhost:8000/storage/reports/${db.nextReportId - 1}/${screenshot.name}`
+          : null,
       created_at: now(),
       dispute: null,
     }
@@ -339,17 +346,22 @@ export const handlers = [
 
     const form = await request.formData()
     const comment = String(form.get('comment') ?? '').trim()
-    const attachments = form.getAll('attachments[]').filter((file): file is File => file instanceof File && file.size > 0)
+    const attachments = form
+      .getAll('attachments[]')
+      .filter((file): file is File => file instanceof File && file.size > 0)
     const errors: Record<string, string[]> = {}
     if (comment.length < 10 || comment.length > 1000) errors.comment = ['Opisz spór, od 10 do 1000 znaków.']
     if (attachments.length > 3) errors.attachments = ['Możesz dodać maksymalnie 3 pliki.']
-    else if (attachments.some((file) => !isImage(file))) errors.attachments = ['Pliki muszą być obrazami PNG, JPG lub WEBP.']
+    else if (attachments.some((file) => !isImage(file)))
+      errors.attachments = ['Pliki muszą być obrazami PNG, JPG lub WEBP.']
     if (Object.keys(errors).length > 0) return validationError(errors)
 
     report.status = 'disputed'
     report.dispute = {
       comment,
-      attachments: attachments.map((file, index) => `http://localhost:8000/storage/disputes/${report.id}/${index + 1}-${file.name}`),
+      attachments: attachments.map(
+        (file, index) => `http://localhost:8000/storage/disputes/${report.id}/${index + 1}-${file.name}`,
+      ),
       created_by: { id: user.id, name: user.name },
       created_at: now(),
     }
