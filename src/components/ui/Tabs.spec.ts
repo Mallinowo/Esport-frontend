@@ -9,8 +9,9 @@ const tabs = [
   { value: 'rules', label: 'Regulamin', disabled: true },
 ]
 
-function mountTabs(modelValue = 'table') {
+function mountTabs(modelValue = 'table', attachTo?: HTMLElement) {
   const wrapper = mount(Tabs, {
+    attachTo,
     props: {
       tabs,
       label: 'Sekcje ligi',
@@ -62,5 +63,52 @@ describe('Tabs', () => {
   it('nie renderuje panelu bez slotu', () => {
     const wrapper = mount(Tabs, { props: { tabs, label: 'Sekcje ligi', modelValue: 'table' } })
     expect(wrapper.find('[role="tabpanel"]').exists()).toBe(false)
+  })
+
+  it('tylko aktywna zakładka jest w kolejności tabulacji', () => {
+    const wrapper = mountTabs('schedule')
+    const tabindex = wrapper.findAll('[role="tab"]').map((tab) => tab.attributes('tabindex'))
+    expect(tabindex).toEqual(['-1', '0', '-1', '-1'])
+  })
+
+  it('przechodzi strzałką w prawo do następnej zakładki i ją fokusuje', async () => {
+    const wrapper = mountTabs('table', document.body)
+    await wrapper.find('[role="tablist"]').trigger('keydown', { key: 'ArrowRight' })
+    expect(wrapper.props('modelValue')).toBe('schedule')
+    expect(document.activeElement).toBe(wrapper.findAll('[role="tab"]')[1].element)
+    wrapper.unmount()
+  })
+
+  it('przechodzi strzałką w lewo do poprzedniej zakładki', async () => {
+    const wrapper = mountTabs('schedule')
+    await wrapper.find('[role="tablist"]').trigger('keydown', { key: 'ArrowLeft' })
+    expect(wrapper.props('modelValue')).toBe('table')
+  })
+
+  it('pomija wyłączoną zakładkę i wraca na początek', async () => {
+    const wrapper = mountTabs('teams')
+    await wrapper.find('[role="tablist"]').trigger('keydown', { key: 'ArrowRight' })
+    expect(wrapper.props('modelValue')).toBe('table')
+  })
+
+  it('z pierwszej zakładki strzałka w lewo przechodzi na ostatnią dostępną', async () => {
+    const wrapper = mountTabs('table')
+    await wrapper.find('[role="tablist"]').trigger('keydown', { key: 'ArrowLeft' })
+    expect(wrapper.props('modelValue')).toBe('teams')
+  })
+
+  it('Home i End przechodzą na pierwszą i ostatnią dostępną zakładkę', async () => {
+    const wrapper = mountTabs('schedule')
+    const list = wrapper.find('[role="tablist"]')
+    await list.trigger('keydown', { key: 'End' })
+    expect(wrapper.props('modelValue')).toBe('teams')
+    await list.trigger('keydown', { key: 'Home' })
+    expect(wrapper.props('modelValue')).toBe('table')
+  })
+
+  it('ignoruje inne klawisze', async () => {
+    const wrapper = mountTabs('schedule')
+    await wrapper.find('[role="tablist"]').trigger('keydown', { key: 'Enter' })
+    expect(wrapper.props('modelValue')).toBe('schedule')
   })
 })
