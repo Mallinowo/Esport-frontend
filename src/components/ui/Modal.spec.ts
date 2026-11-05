@@ -1,4 +1,4 @@
-import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import Modal from './Modal.vue'
 
@@ -7,7 +7,7 @@ function mountModal(open = true, props = {}) {
     props: { title: 'Zgłoś wynik', open, ...props },
     slots: {
       default: 'Po zgłoszeniu wyniku nie można go edytować.',
-      footer: '<button type="button">Anuluj</button>',
+      footer: '<button type="button">Anuluj</button><button type="button">Zgłoś</button>',
     },
     attachTo: document.body,
   })
@@ -82,5 +82,60 @@ describe('Modal', () => {
   it('pokazuje stopkę z przyciskami', () => {
     mountModal()
     expect(dialog()?.textContent).toContain('Anuluj')
+  })
+
+  it('po otwarciu przenosi fokus do okna', async () => {
+    mountModal()
+    await flushPromises()
+    expect(document.activeElement?.getAttribute('aria-label')).toBe('Zamknij')
+  })
+
+  it('ustawia fokus na elemencie z autofocus', async () => {
+    mount(Modal, {
+      props: { title: 'Zgłoś wynik', open: true },
+      slots: { footer: '<button type="button">Anuluj</button><button type="button" autofocus>Zgłoś</button>' },
+      attachTo: document.body,
+    })
+    await flushPromises()
+    expect(document.activeElement?.textContent).toBe('Zgłoś')
+  })
+
+  it('Tab na ostatnim przycisku wraca na pierwszy', async () => {
+    mountModal()
+    await flushPromises()
+    const buttons = dialog()?.querySelectorAll<HTMLButtonElement>('button') ?? []
+    buttons[buttons.length - 1].focus()
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', cancelable: true }))
+    expect(document.activeElement).toBe(buttons[0])
+  })
+
+  it('Shift+Tab na pierwszym przycisku przechodzi na ostatni', async () => {
+    mountModal()
+    await flushPromises()
+    const buttons = dialog()?.querySelectorAll<HTMLButtonElement>('button') ?? []
+    buttons[0].focus()
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, cancelable: true }))
+    expect(document.activeElement).toBe(buttons[buttons.length - 1])
+  })
+
+  it('Tab w środku okna nie jest blokowany', async () => {
+    mountModal()
+    await flushPromises()
+    const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true })
+    document.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(false)
+  })
+
+  it('po zamknięciu oddaje fokus przyciskowi, który otworzył okno', async () => {
+    const trigger = document.createElement('button')
+    document.body.appendChild(trigger)
+    trigger.focus()
+    const wrapper = mountModal(false)
+    await wrapper.setProps({ open: true })
+    await flushPromises()
+    expect(document.activeElement).not.toBe(trigger)
+    await wrapper.setProps({ open: false })
+    expect(document.activeElement).toBe(trigger)
+    trigger.remove()
   })
 })
