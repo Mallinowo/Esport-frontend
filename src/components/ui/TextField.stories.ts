@@ -34,7 +34,9 @@ export const Number: Story = { args: { label: 'Wynik', type: 'number', placehold
 
 export const Filled: Story = { args: { modelValue: 'Wilki Legnica' } }
 
-export const WithError: Story = { args: { label: 'Wynik', type: 'number', modelValue: 120, error: 'Wynik musi być liczbą od 0 do 99' } }
+export const WithError: Story = {
+  args: { label: 'Wynik', type: 'number', modelValue: 120, error: 'Wynik musi być liczbą od 0 do 99' },
+}
 
 export const Disabled: Story = { args: { disabled: true, modelValue: 'Wilki Legnica' } }
 
@@ -42,7 +44,8 @@ export const WithIcon: Story = {
   render: (args) => ({
     components: { TextField, IconPlus },
     setup: () => ({ args }),
-    template: '<div class="max-w-sm"><TextField v-bind="args"><template #icon><IconPlus /></template></TextField></div>',
+    template:
+      '<div class="max-w-sm"><TextField v-bind="args"><template #icon><IconPlus /></template></TextField></div>',
   }),
 }
 

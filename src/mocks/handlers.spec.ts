@@ -26,7 +26,9 @@ describe('mocki API', () => {
   })
 
   it('filtrują rozgrywki po grze, formacie i statusie', async () => {
-    const { data } = await api.get<Paginated<Competition>>('/competitions?game=cs2&format[]=league&status[]=in_progress')
+    const { data } = await api.get<Paginated<Competition>>(
+      '/competitions?game=cs2&format[]=league&status[]=in_progress',
+    )
     expect(data.data.map((competition) => competition.id)).toEqual([1])
   })
 
@@ -51,7 +53,10 @@ describe('mocki API', () => {
   })
 
   it('zapisują zgłoszenie wyniku i zmieniają status meczu', async () => {
-    const created = await api.post<Resource<MatchReport>>('/matches/110/reports', reportForm({ home_score: '2', away_score: '1', map: 'Nuke' }))
+    const created = await api.post<Resource<MatchReport>>(
+      '/matches/110/reports',
+      reportForm({ home_score: '2', away_score: '1', map: 'Nuke' }),
+    )
     expect(created.status).toBe(201)
     expect(created.data.data).toMatchObject({ status: 'pending', home_score: 2, away_score: 1, map: 'Nuke' })
 
