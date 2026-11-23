@@ -1,5 +1,13 @@
-import type { Preview } from '@storybook/vue3-vite'
+import { setup, type Preview } from '@storybook/vue3-vite'
+import { createMemoryHistory, createRouter } from 'vue-router'
+import { routes } from '../src/router/routes'
 import '../src/style.css'
+
+const router = createRouter({ history: createMemoryHistory(), routes })
+
+setup((app) => {
+  app.use(router)
+})
 
 const preview: Preview = {
   tags: ['autodocs'],
@@ -27,6 +35,12 @@ const preview: Preview = {
     },
   },
   initialGlobals: { theme: 'light' },
+  loaders: [
+    async ({ parameters }) => {
+      await router.push(parameters.route ?? '/rozgrywki')
+      return {}
+    },
+  ],
   decorators: [
     (story, context) => {
       document.documentElement.classList.toggle('dark', context.globals.theme === 'dark')
