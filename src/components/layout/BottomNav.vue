@@ -12,9 +12,15 @@ const route = useRoute()
       :key="item.to"
       :to="item.to"
       :aria-current="route.meta.section === item.section ? 'page' : undefined"
-      class="flex h-14 items-center justify-center text-caption focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-line-focus"
+      class="relative flex h-14 items-center justify-center text-caption focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-line-focus"
       :class="route.meta.section === item.section ? 'font-extrabold text-brand-fg' : 'text-fg-secondary'"
     >
+      <span
+        v-if="route.meta.section === item.section"
+        data-test="indicator"
+        class="absolute top-0 left-1/2 h-0.75 w-8 -translate-x-1/2 rounded-b-sm bg-brand-default"
+        aria-hidden="true"
+      />
       {{ item.label }}
     </RouterLink>
   </nav>
